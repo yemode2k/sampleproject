@@ -1,0 +1,51 @@
+;; market Basket Analysis using WhizzML
+;;Create Source  source/5aea713deba31d2031001107
+(define source1
+  (create-and-wait-source {"remote" source-url1
+                           "name" "MBA-data"
+                           "source_parser"
+                           {"header" false
+                            "locale" "en-us"
+                            "missing_tokens"
+                            [""
+                             "NaN"
+                             "NULL"
+                             "N/A"
+                             "null"
+                             "-"
+                             "#REF!"
+                             "#VALUE!"
+                             "?"
+                             "#NULL!"
+                             "#NUM!"
+                             "#DIV/0"
+                             "n/a"
+                             "#NAME?"
+                             "NIL"
+                             "nil"
+                             "na"
+                             "#N/A"
+                             "NA"]
+                            "quote" "\""
+                            "separator" ""}}))
+;; Updating properties for resource: MBA-data
+(define source2
+  (update-and-wait source1
+                   {"fields" {"000000" {"name" "field1" "optype" "items"}}}))
+;; Create dataset dataset/5aea71852a8347334d0001d7
+(define dataset1
+  (create-and-wait-dataset {"source" source2
+                            "name" "MBA-data"
+                            "objective_field" {"id" ""}}))
+;; Crete association association/5aead11c2a834733470016f5
+(define association1
+  (create-and-wait-association {"dataset" dataset1
+                                "name" "MBA-data"
+                                "min_support" 1.0E-4
+                                "discretization"
+                                {"pretty" true
+                                 "size" 5
+                                 "trim" 0.0
+                                 "type" "population"}}))
+
+(define output-association association1)
